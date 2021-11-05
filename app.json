@@ -1,0 +1,11 @@
+{
+  "expo": {
+    "name": "MeasurerApp",
+    "slug": "MeasurerApp",
+    "version": "1.0.0",
+    "assetBundlePatterns": [
+      "**/*"
+    ]
+  },
+  "name": "MeasurerApp"
+}
