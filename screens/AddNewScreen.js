@@ -34,14 +34,18 @@ class entryField {
 
 const AddNewScreen = props => {
 
-    const dispatch = useDispatch();
 
 
     useEffect(() => {
-        const callBackFunction = props.navigation.getParam('callBackFunction');
-        if (callBackFunction !== undefined)
-            return callBackFunction;
-    }, [])
+        props.navigation.setOptions(
+            {
+                title: 'Add New',
+                headerStyle: { backgroundColor: Colors.secondary },
+                headerTintColor: Colors.textAndSymbols
+            }
+        )
+    }, []);
+
     //const [showSubmitButton, setShowSubmitButton] = useState(false);
     const [idIsSubmittable, setIdIsSubmittable] = useState(false);
     const [idIsValid, setIdIsValid] = useState(true);
@@ -217,38 +221,11 @@ const AddNewScreen = props => {
         <View style={styles.container} >
 
             <TextEntryBox placeholderText={"ID"} valueIsValid={idIsValid} fielSetFunc={setIdFunc} containerStyle={styles.inputBox} />
-            <TextEntryBox placeholderText={"Dame ID"} valueIsValid={dameIDIsValid} fielSetFunc={setDameIdFunc} containerStyle={styles.inputBox} />
-            <TextEntryBox placeholderText={"Sire ID"} valueIsValid={sireIDIsValid} fielSetFunc={setSireIdFunc} containerStyle={styles.inputBox} />
-            <TextEntryBox placeholderText={"Birthweight In Grams"} valueIsValid={birthWeightIsValid} fielSetFunc={setBirthWeightFunc} keyboardType='numeric' containerStyle={styles.inputBox} />
-            <TextEntryBox placeholderText={"Remarks"} valueIsValid={remarksIsValid} fielSetFunc={setRemarksFunc} containerStyle={styles.inputBox} />
-            <Picker
-                onValueChange={(value) => setSexFunc(value)}
-                useNativeAndroidPickerStyle={false}
-                style={customPickerStyles}
-                placeholder={{ label: "Sex", value: null }}
-                items={[
-                    { label: Values.sex.MALE, value: Values.sex.MALE },
-                    { label: Values.sex.FEMALE, value: Values.sex.FEMALE }
-                ]}
-            />
-            <Button onPress={showLambingDatePicker} title={"Date of Birth: " + getFormattedDate(lambingDate)} titleStyle={styles.buttonTitle} buttonStyle={styles.buttonStyle} containerStyle={styles.buttonContainer} />
-            <Button onPress={showMatingDatePicker} title={"Date of Mating: " + getFormattedDate(matingDate)} titleStyle={styles.buttonTitle} buttonStyle={styles.buttonStyle} containerStyle={styles.buttonContainer} />
 
-            <DateTimePickerModal
-                isVisible={isLambingDatePickerVisible}
-                mode="date"
-                date={lambingDate}
-                onConfirm={handleLambingConfirm}
-                onCancel={hideLambingDatePicker}
-            />
-            <DateTimePickerModal
-                isVisible={isMatingDatePickerVisible}
-                mode="date"
-                date={matingDate}
-                maximumDate={lambingDate}
-                onConfirm={handleMatingConfirm}
-                onCancel={hideMatingDatePicker}
-            />
+            <Button onPress={showLambingDatePicker} title={"Add"} titleStyle={styles.buttonTitle} buttonStyle={styles.buttonStyle} containerStyle={styles.buttonContainer} />
+            <Button onPress={showLambingDatePicker} title={"✓"} titleStyle={styles.buttonTitle} buttonStyle={styles.buttonStyle} containerStyle={styles.buttonContainer} />
+
+
 
         </View>
         {getSubmitButton()}
@@ -256,11 +233,7 @@ const AddNewScreen = props => {
     );
 }
 
-AddNewScreen.navigationOptions = {
-    headerTitle: 'Add New',
-    headerStyle: { backgroundColor: Colors.secondary },
-    headerTintColor: Colors.textAndSymbols
-};
+
 
 
 const styles = StyleSheet.create({
@@ -272,7 +245,8 @@ const styles = StyleSheet.create({
         width: '100%',
         backgroundColor: Colors.primary,
         paddingTop: 30,
-        paddingLeft: 30
+        paddingLeft: 30,
+        paddingRight: 30
     },
     numberText: {
         color: Colors.textAndSymbols,
@@ -292,7 +266,8 @@ const styles = StyleSheet.create({
     },
     buttonContainer:
     {
-        marginBottom: 25
+        marginBottom: 25,
+        alignSelf: 'flex-end'
     }
 });
 

@@ -1,6 +1,6 @@
-import { createAppContainer } from 'react-navigation';
-import { createStackNavigator } from 'react-navigation-stack';
-import { createDrawerNavigator } from 'react-navigation-drawer';
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
+import { createDrawerNavigator } from '@react-navigation/drawer';
 
 import DetailsScreen from '../screens/DetailsScreen';
 import SearchScreen from '../screens/MainScreen';
@@ -16,15 +16,12 @@ import React from 'react';
 
 
 
-const Navigator = createStackNavigator({
-    Search: { screen: SearchScreen, navigationOptions: { headerShown: false } },
-    Details: { screen: DetailsScreen, navigationOptions: { gestureEnabled: true, gestureDirection: 'horizontal' } },
-    AddNew: { screen: AddNewScreen, navigationOptions: { gestureEnabled: true, gestureDirection: 'horizontal' } },
-    Editing: { screen: EditingScreen, navigationOptions: { gestureEnabled: true, gestureDirection: 'horizontal' } }
-});
+const StackNavigator = createStackNavigator();
 
 
-const drawerContents = props => {
+
+
+/*onst drawerContents = props => {
 
     return (
         <View style={styles.container}>
@@ -52,7 +49,7 @@ const mainNavigator = createDrawerNavigator({
 }, {
     drawerBackgroundColor: 'transparent',
     contentComponent: drawerContents
-});
+});*/
 
 
 const styles = StyleSheet.create({
@@ -73,4 +70,24 @@ const styles = StyleSheet.create({
     }
 })
 
-export default createAppContainer(mainNavigator);
+export default function App() {
+
+    /*{
+        Search: { screen: SearchScreen, navigationOptions: { headerShown: false } },
+        Details: { screen: DetailsScreen, navigationOptions: { gestureEnabled: true, gestureDirection: 'horizontal' } },
+        AddNew: { screen: AddNewScreen, navigationOptions: { gestureEnabled: true, gestureDirection: 'horizontal' } },
+        Editing: { screen: EditingScreen, navigationOptions: { gestureEnabled: true, gestureDirection: 'horizontal' } }
+    }*/
+
+    return (
+        <NavigationContainer>
+            <StackNavigator.Navigator initialRouteName="Home">
+                <StackNavigator.Screen name="Search" component={SearchScreen} options={{ headerShown: false }} />
+                <StackNavigator.Screen name="Details" component={DetailsScreen} />
+                <StackNavigator.Screen name="AddNew" component={AddNewScreen} />
+                <StackNavigator.Screen name="Editing" component={EditingScreen} />
+
+            </StackNavigator.Navigator>
+        </NavigationContainer>
+    );
+}

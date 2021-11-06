@@ -47,20 +47,24 @@ const MainScreen = props => {
 
 
   const fetchAllCards = () => {
+
     getAllLambs().then(cards => {
       dispatch(setCards(cards));
     }
     )
   };
 
+
+
   useEffect(fetchAllCards, []);
 
-  const callBackFunction = () => {
-    getAllLambs().then(cards => {
-      dispatch(setCards(cards));
-    }
-    )
-  }
+  useEffect(() => {
+    const unsubscribe = props.navigation.addListener('focus', () => {
+      fetchAllCards();
+    });
+
+    return unsubscribe;
+  }, [props.navigation]);
 
 
   const screenWidth = Dimensions.get('window').width;
@@ -89,11 +93,11 @@ const MainScreen = props => {
       <Text style={styles.numberText}> {'Records: ' + fetchedCards.length}</Text>
 
       <ScrollView style={{ width: '100%' }} contentContainerStyle={{ alignItems: 'center', paddingTop: 5 }} scrollEventThrottle='16'>
-        <CardList cards={fetchedCards} navigationProps={props.navigation} callBackFunction={callBackFunction} />
+        <CardList cards={fetchedCards} navigationProps={props.navigation} />
         <Text style={{ color: Colors.textAndSymbols, height: 70 }} > End of List  </Text>
       </ScrollView>
 
-      <AddButton navigationProps={props.navigation} callBackFunction={callBackFunction} />
+      <AddButton navigationProps={props.navigation} />
     </View>
   );
 }

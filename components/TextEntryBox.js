@@ -90,7 +90,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'space-between',
         padding: 10,
-        width: '80%',
+        width: '60%',
         height: 50,
         borderRadius: 10,
         borderColor: Colors.tertiary

@@ -7,7 +7,7 @@ import DetailsScreen from './screens/DetailsScreen';
 import * as Font from 'expo-font';
 import AppLoading from 'expo-app-loading';
 import Svg, { G, Path, Rect } from 'react-native-svg';
-import { createDrawerNavigator } from '@react-navigation/drawer';
+
 
 
 import { createStore, combineReducers } from 'redux';

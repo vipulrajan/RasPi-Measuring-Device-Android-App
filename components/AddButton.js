@@ -9,7 +9,7 @@ const AddButton = props => {
 
     return (
         <View style={styles.container}>
-            <TouchableOpacity onPress={() => { props.navigationProps.navigate({ routeName: 'AddNew', params: { callBackFunction: props.callBackFunction } }); }} style={{ width: '100%', alignItems: 'center' }}>
+            <TouchableOpacity onPress={() => { props.navigationProps.navigate({ name: 'AddNew' }); }} style={{ width: '100%', alignItems: 'center' }}>
 
 
                 <Entypo name="plus" color='white' size={styles.container.height - 10} />
