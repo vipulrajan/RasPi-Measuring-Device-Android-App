@@ -11,7 +11,7 @@ import { fetchCards, setCards } from '../store/actions/CardActions'
 import { set } from 'react-native-reanimated';
 import { Ionicons, FontAwesome, AntDesign, Entypo } from '@expo/vector-icons';
 import SeparatorBar from '../components/SeparatorBar';
-import { getAllLambs } from '../databases/DataStore';
+import { getAllCards } from '../databases/DataStore';
 import Values from '../constants/Values';
 import { getCategory } from '../src/DateMethods'
 //const dispatch = useDispatch();
@@ -22,7 +22,7 @@ const MainScreen = props => {
   const [searchText, setSearchText] = useState('');
   const [searchHasText, setSearchHasText] = useState(false);
 
-  const filters = useSelector(state => state.filterState);
+
 
   const fetchedCards = useSelector(state => {
 
@@ -30,11 +30,7 @@ const MainScreen = props => {
       if (!searchHasText) {
         return state.cardsScroll.cardsOnScroll.map(x => {
           return { ...x, category: getCategory(new Date(x.dateOfLambing)) }
-        }).filter(x => {
-          const allFilterKeys = Object.keys(filters);
-          const retBool = allFilterKeys.reduce((acc, key) => acc && filters[key].reduce((yAcc, yKey) => yAcc || yKey === x[key], false), true);
-          return retBool
-        });
+        })
       }
       else {
         return state.cardsScroll.cardsOnScroll.filter(x => x.id.startsWith(searchText));
@@ -48,7 +44,7 @@ const MainScreen = props => {
 
   const fetchAllCards = () => {
 
-    getAllLambs().then(cards => {
+    getAllCards().then(cards => {
       dispatch(setCards(cards));
     }
     )
@@ -87,7 +83,6 @@ const MainScreen = props => {
         containerStyle={{ width: percentageSearchBoxWidth, marginBottom: 20 }}
         onFocus={onPressFunc}
         onEndEditing={onEndEditingFunc}
-        filters={filters}
       />
       <SeparatorBar />
       <Text style={styles.numberText}> {'Records: ' + fetchedCards.length}</Text>

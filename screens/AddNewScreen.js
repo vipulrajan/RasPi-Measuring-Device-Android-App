@@ -7,13 +7,17 @@ import Card from '../components/Card';
 import TextEntryBox from '../components/TextEntryBox';
 import colors from '../constants/colors';
 import DateTimePickerModal from "react-native-modal-datetime-picker";
-import { insertNewLamb, getAllLambs, deleteLamb, getLamb } from '../databases/DataStore';
+import { insertNewCard, getAllCards, deleteCard, getCard } from '../databases/DataStore';
 import CardDetails from '../src/CardDetails';
 import { useDispatch } from 'react-redux';
 import { fetchCards, setCards } from '../store/actions/CardActions'
 import Picker from 'react-native-picker-select';
 import { showMessage, hideMessage } from "react-native-flash-message";
 import Values from '../constants/Values';
+import BluetoothSerial, {
+    withSubscription
+} from "react-native-bluetooth-serial-next";
+
 
 import 'intl';
 import 'intl/locale-data/jsonp/en';
@@ -35,6 +39,26 @@ class entryField {
 const AddNewScreen = props => {
 
 
+    const [stopReading, setStopReading] = useState(false);
+    const [recievedValue, setRecievedValue] = useState(0);
+
+    useEffect(() => {
+
+        console.log("connecting")
+
+        BluetoothSerial.read((data, subscription) => {
+
+            setRecievedValue(Number(data.trim()))
+            if (stopReading && subscription) {
+                console.log("stopped")
+                BluetoothSerial.removeSubscription(subscription);
+            }
+
+        }, "\r\n");
+
+        return () => { setStopReading(true) };
+    }, [])
+
 
     useEffect(() => {
         props.navigation.setOptions(
@@ -45,6 +69,8 @@ const AddNewScreen = props => {
             }
         )
     }, []);
+
+
 
     //const [showSubmitButton, setShowSubmitButton] = useState(false);
     const [idIsSubmittable, setIdIsSubmittable] = useState(false);
@@ -59,126 +85,27 @@ const AddNewScreen = props => {
         setIdIsSubmittable(isSet);
     }
 
-    const [dameIDIsSubmittable, setDameIDIsSubmittable] = useState(false);
-    const [dameIDIsValid, setDameIDIsValid] = useState(true);
 
-    const [dameID, setDameId] = useState(new entryField('', false));
-    const setDameIdFunc = (value, isSet) => {
-        setDameId(new entryField(value, isSet));
-        setDameIDIsValid(isSet);
-        setDameIDIsSubmittable(isSet);
+
+    const [unit, setUnit] = useState(Values.units.cm)
+    const onUnitChange = (value) => {
+        setUnit(value)
     }
 
-    const [sireIDIsSubmittable, setSireIDIsSubmittable] = useState(false);
-    const [sireIDIsValid, setSireIDIsValid] = useState(true);
-    const [sireID, setSireId] = useState(new entryField('', false));
+    const [measuredValues, setMeasuredValues] = useState({});
 
-
-    const setSireIdFunc = (value, isSet) => {
-        setSireId(new entryField(value, isSet));
-        setSireIDIsValid(isSet);
-        setSireIDIsSubmittable(isSet);
-    }
-
-    const [remarksIsSubmittable, setRemarksIsSubmittable] = useState(true);
-    const [remarksIsValid, setRemarksIDIsValid] = useState(true);
-    const [remarks, setRemarks] = useState(new entryField('', false));
-
-    const setRemarksFunc = (value, isSet) => {
-        setRemarks(new entryField(value, isSet));
-        setRemarksIDIsValid(true);
-        setRemarksIsSubmittable(true);
-    }
-
-    const [birthWeightIsSubmittable, setBirthWeightIsSubmittable] = useState(false);
-    const [birthWeightIsValid, setBirthWeightIDIsValid] = useState(true);
-    const [birthWeight, setBirthWeight] = useState(new entryField(-1, false));
-
-    const setBirthWeightFunc = (value, isSet) => {
-        const intValue = Number(value);
-        if (isNaN(intValue)) {
-            setBirthWeight(new entryField(intValue, false));
-            setBirthWeightIDIsValid(false);
-            setBirthWeightIsSubmittable(false);
-        }
-        else {
-            setBirthWeight(new entryField(intValue, isSet));
-            setBirthWeightIDIsValid(isSet);
-            setBirthWeightIsSubmittable(isSet);
-        }
-    }
-
-
-    const [sex, setSex] = useState(new entryField(null, false));
-    const [sexIsSubmittable, setSexIsSubmittable] = useState(false);
-
-    const setSexFunc = (value) => {
-
-        if (value === null) {
-            setSex(new entryField(null, false));
-            setSexIsSubmittable(false);
-        }
-        else {
-            setSex(new entryField(value, true));
-            setSexIsSubmittable(true);
-        }
-    }
-
-    const [isLambingDatePickerVisible, setLambingDatePickerVisibility] = useState(false);
-    const [lambingDate, setLambingDate] = useState(new Date(new Date().toDateString()));
-
-    const getRandomMatingDate = (date) => {
-        const retDate = new Date(new Date(date).setDate(date.getDate() - (Math.random() * 5 + 148)));
-        return retDate;
-    }
-
-
-
-    const showLambingDatePicker = () => {
-        setLambingDatePickerVisibility(true);
-    };
-
-    const hideLambingDatePicker = () => {
-        setLambingDatePickerVisibility(false);
-    };
-
-
-
-
-
-
-    const [isMatingDatePickerVisible, setMatingDatePickerVisibility] = useState(false);
-    const [matingDate, setMatingDate] = useState(getRandomMatingDate(new Date()));
-
-    const showMatingDatePicker = () => {
-        setMatingDatePickerVisibility(true);
-    };
-
-    const hideMatingDatePicker = () => {
-        setMatingDatePickerVisibility(false);
-    };
-
-    const handleMatingConfirm = (date) => {
-        setMatingDate(date);
-        hideMatingDatePicker();
-    };
-
-    const handleLambingConfirm = (date) => {
-        hideLambingDatePicker();
-        setLambingDate(date);
-        setMatingDate(getRandomMatingDate(date));
-    };
-
+    const [submitButtonText, setSubmitButtonText] = useState("Submit");
+    const [isSubmitButtonDisabled, setIsSubmitButtonDisabled] = useState(false);
 
     const onSubmit = () => {
 
         setSubmitButtonText("Saving");
         setIsSubmitButtonDisabled(true);
-        const cardi = new CardDetails(id.value, dameID.value, sireID.value, lambingDate, matingDate, sex.value, birthWeight.value, remarks.value, Values.status.ACTIVE, null);
+        const cardi = new CardDetails(id.value, unit, measuredValues);
 
-        getLamb(id.value).then(value => {
+        getCard(id.value).then(value => {
             if (value === null) {
-                insertNewLamb(cardi.id, cardi.toJSON()).then(() => {
+                insertNewCard(cardi.id, cardi.toJSON()).then(() => {
                     showMessage({
                         message: "Added a new entry",
                         type: "info",
@@ -203,11 +130,33 @@ const AddNewScreen = props => {
     }
 
 
-    const [submitButtonText, setSubmitButtonText] = useState("Submit");
-    const [isSubmitButtonDisabled, setIsSubmitButtonDisabled] = useState(false);
+
+
+    //const startWidth = 
+    const [viewWidth, setViewWidth] = useState(0)
+    const [buttonWidth, setButtonWidth] = useState(viewWidth);
+
+    const [isMeasuring, setIsMeasuring] = useState(false);
+    const [measurementNumber, setMeasurementNumber] = useState(1);
+
+    const onPressFunc = () => {
+        if (!isMeasuring) {
+            Animated.timing(buttonWidth, { useNativeDriver: false, toValue: 100, timing: 10000 }).start();
+            setIsMeasuring(true);
+        }
+        else {
+
+            setMeasuredValues(value => {
+                value[measurementNumber] = recievedValue;
+                return value;
+            })
+
+            setMeasurementNumber(value => value + 1);
+        }
+    }
 
     const getSubmitButton = () => {
-        const showSubmitButton = idIsSubmittable && dameIDIsSubmittable && sireIDIsSubmittable && remarksIsSubmittable && birthWeightIsSubmittable && sexIsSubmittable;
+        const showSubmitButton = idIsSubmittable;
         if (showSubmitButton)
             if (isSubmitButtonDisabled)
                 return (<Button title={submitButtonText} disabled onPress={onSubmit} containerStyle={{ alignSelf: 'center' }} buttonStyle={{ backgroundColor: Colors.tertiary }} />);
@@ -217,19 +166,70 @@ const AddNewScreen = props => {
             return (<View></View>);
     }
 
+
+
+    const getMeasurementArea = () => {
+
+        return (<View style={{ width: '100%', flex: 1, flexDirection: 'row', justifyContent: 'flex-end' }} onLayout={(event) => {
+            var { x, y, width, height } = event.nativeEvent.layout;
+            setViewWidth(width);
+            if (!isMeasuring)
+                setButtonWidth(new Animated.Value(width));
+        }}>
+            <Animated.View style={{ backgroundColor: Colors.secondary, flex: 1, borderRadius: 10, marginRight: 10, height: 52, justifyContent: 'center', alignItems: 'center' }}>
+                <Text style={{ color: Colors.textAndSymbols, fontSize: 21 }}>{Number(recievedValue / Values.unitDivisors[unit]).toFixed(3)}</Text>
+            </Animated.View>
+            <Animated.View style={{ width: buttonWidth }}>
+                <Button onPress={onPressFunc} title={"Add"} titleStyle={styles.buttonTitle} buttonStyle={styles.buttonStyle} containerStyle={styles.buttonContainer} />
+            </Animated.View>
+        </View>);
+    }
+
+    const getMeasurements = () => {
+
+        return Object.keys(measuredValues).map(key => {
+            return (<View key={key} style={{ flexDirection: 'row', flex: 1, width: '100%', justifyContent: 'space-between' }}>
+                <Text style={styles.categoryText} >
+                    {key.toString() + ": " + Number(measuredValues[key] / Values.unitDivisors[unit]).toFixed(3)}
+                </Text>
+                <Button onPress={() => {
+                    setMeasuredValues(value => {
+                        var newObj = { ...value };
+                        delete newObj[key];
+                        return newObj;
+                    })
+                }} title={"X"} titleStyle={styles.buttonTitle} buttonStyle={{ ...styles.buttonStyle, padding: 5 }} containerStyle={{ ...styles.buttonContainer, width: 70 }} />
+
+            </View>);
+        })
+
+    }
+
     return (<ScrollView alwaysBounceVertical='false' style={{ backgroundColor: Colors.primary }}>
         <View style={styles.container} >
 
             <TextEntryBox placeholderText={"ID"} valueIsValid={idIsValid} fielSetFunc={setIdFunc} containerStyle={styles.inputBox} />
+            <Picker
+                onValueChange={(value) => onUnitChange(value)}
+                useNativeAndroidPickerStyle={false}
+                style={customPickerStyles}
+                placeholder={{ label: "Unit" }}
+                value={unit}
+                items={[
+                    { label: Values.units.cm, value: Values.units.cm },
+                    { label: Values.units.in, value: Values.units.in },
+                    { label: Values.units.ft, value: Values.units.ft },
+                    { label: Values.units.m, value: Values.units.m }
+                ]}
+            />
 
-            <Button onPress={showLambingDatePicker} title={"Add"} titleStyle={styles.buttonTitle} buttonStyle={styles.buttonStyle} containerStyle={styles.buttonContainer} />
-            <Button onPress={showLambingDatePicker} title={"✓"} titleStyle={styles.buttonTitle} buttonStyle={styles.buttonStyle} containerStyle={styles.buttonContainer} />
+            {getMeasurements()}
 
-
+            {getMeasurementArea()}
 
         </View>
         {getSubmitButton()}
-    </ScrollView>
+    </ScrollView >
     );
 }
 
@@ -267,7 +267,13 @@ const styles = StyleSheet.create({
     buttonContainer:
     {
         marginBottom: 25,
-        alignSelf: 'flex-end'
+        alignSelf: 'flex-end',
+        width: '100%'
+    },
+    categoryText: {
+        color: Colors.textAndSymbols,
+        fontSize: 21,
+        marginBottom: 25
     }
 });
 
@@ -298,4 +304,4 @@ const customPickerStyles = StyleSheet.create({
     }
 });
 
-export default AddNewScreen;
+export default withSubscription({ subscriptionName: "events" })(AddNewScreen);

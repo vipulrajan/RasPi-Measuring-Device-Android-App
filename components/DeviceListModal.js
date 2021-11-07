@@ -5,58 +5,42 @@ import Colors from '../constants/colors';
 
 import { Ionicons, FontAwesome, AntDesign, Entypo } from '@expo/vector-icons';
 import Modal from 'react-native-modal';
-import CategoryCheckboxes from './CategoryCheckboxes';
-import Values from '../constants/Values';
-import initialState from '../constants/InitialFilterState';
-import { getAllLambs } from '../databases/DataStore';
-import { useDispatch, useSelector } from 'react-redux';
-import { getCategory } from '../src/DateMethods'
-import { setFilters } from '../store/actions/FilterActions'
+
+import { TouchableOpacity } from 'react-native';
+import SeparatorBar from './SeparatorBar';
+
+const DeviceListModal = props => {
 
 
-const FilterModal = props => {
-
-    const dispatch = useDispatch();
     const isModalVisible = props.isModalVisible;
     const setIsModalVisible = props.setIsModalVisible;
 
-    const onClear = () => {
-        console.log("Called");
-        dispatch(setFilters(initialState()));
-    };
-
-
-    const allLambs = useSelector(state => state.cardsScroll.cardsOnScroll.map(x => {
-        return { ...x, category: getCategory(new Date(x.dateOfLambing)) }
-    }))
-    //const filterState = useSelector(state => state.filterState)
-
-
-
-    const headersAndValues = () => {
-        return Values.filterProperties.map(filterProperty => {
-            const distinctValues = new Set(allLambs.map(lamb => lamb[filterProperty]))
-
-            return { header: filterProperty, values: [...distinctValues] }
-        })
-    }
-
-
-
+    const listOfDevices = props.listOfDevices;
+    const callbackFunction = props.callbackFunction;
 
     return (
         <Modal isVisible={isModalVisible} onBackButtonPress={() => setIsModalVisible(false)} style={{ flexDirection: 'column', justifyContent: 'flex-end', alignItems: 'center' }} >
             <View style={styles.modal}>
                 <ScrollView style={{ width: '100%', flex: 1, margin: 20, paddingHorizontal: 20 }}>
                     {
-                        headersAndValues().map(headerAndValues => {
-                            return (<CategoryCheckboxes key={headerAndValues.header} header={headerAndValues.header} values={headerAndValues.values} />);
+                        listOfDevices.map(device => {
+
+                            return (
+                                <TouchableOpacity key={device.id} onPress={() => { callbackFunction(device.id) }} style={{ width: '90%', alignItems: 'center' }}>
+
+                                    <Text style={{ ...styles.categoryText, fontSize: 21 }}>  {device.name} </Text>
+                                    <SeparatorBar ></SeparatorBar>
+
+                                </TouchableOpacity>
+                            );
+
                         })
                     }
+
                 </ScrollView>
 
             </View>
-            <Button title="Clear Filters" disabledStyle={styles.buttonDisabled} titleStyle={styles.buttonTitle} buttonStyle={styles.buttonStyle} containerStyle={{ ...styles.buttonContainer, marginBottom: 10, width: "100%", marginTop: 20 }} onPress={onClear} />
+
             <Button title="Back" titleStyle={styles.buttonTitle} buttonStyle={styles.buttonStyle} containerStyle={{ ...styles.buttonContainer, marginBottom: 20, width: "100%" }} onPress={() => setIsModalVisible(false)} />
         </Modal>
     );
@@ -102,7 +86,11 @@ const styles = StyleSheet.create({
     {
         marginBottom: 25,
         width: "40%"
+    },
+    categoryText: {
+        color: Colors.textAndSymbols,
+        fontSize: 18
     }
 });
 
-export default FilterModal;
+export default DeviceListModal;

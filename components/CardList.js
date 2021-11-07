@@ -14,7 +14,7 @@ const CardList = props => {
     return (
         cards.map(card => {
             return (
-                <Card key={card.id} cardDetails={card} navigationProps={props.navigationProps} callBackFunction={props.callBackFunction} />
+                <Card key={card.id} cardDetails={card} navigationProps={props.navigationProps} />
             );
         }
         )

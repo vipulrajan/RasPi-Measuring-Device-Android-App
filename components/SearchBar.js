@@ -4,7 +4,6 @@ import { Button } from 'react-native-elements';
 import Colors from '../constants/colors';
 
 import { Ionicons, FontAwesome, AntDesign, Entypo } from '@expo/vector-icons';
-import FilterModal from './FilterModal';
 
 const SearchBar = props => {
 
@@ -72,11 +71,6 @@ const SearchBar = props => {
         }
     };
 
-    const [isModalVisible, setIsModalVisible] = useState(false);
-
-    const toggleFilterModal = () => {
-        setIsModalVisible(!isModalVisible);
-    }
 
 
     return (
@@ -96,11 +90,6 @@ const SearchBar = props => {
                 value={enteredValue}
                 style={{ ...styles.input, fontSize: outerViewHeight - 30, ...styles.inputStyle }} />
             {getCrossIcon()}
-            <TouchableOpacity>
-                <Ionicons name="filter" color='black' size={outerViewHeight - 20} onPress={toggleFilterModal} />
-            </TouchableOpacity>
-
-            <FilterModal isModalVisible={isModalVisible} setIsModalVisible={setIsModalVisible} />
         </Animated.View>
     );
 }

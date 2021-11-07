@@ -27,6 +27,7 @@
     "react": "17.0.1",
     "react-dom": "17.0.1",
     "react-native": "0.64.2",
+    "react-native-bluetooth-serial-next": "^1.2.3",
     "react-native-elements": "^3.4.2",
     "react-native-flash-message": "^0.2.0",
     "react-native-gesture-handler": "~1.10.2",

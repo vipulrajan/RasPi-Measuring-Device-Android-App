@@ -20,10 +20,10 @@ import FlashMessage from "react-native-flash-message";
 import * as Device from 'expo-device';
 import * as ScreenOrientation from 'expo-screen-orientation';
 import { cos } from 'react-native-reanimated';
-import FilterReducer from './store/reducers/FilterReducer'
 
 
-const rootReducer = combineReducers({ cardsScroll: CardsOnScrollReducer, filterState: FilterReducer });
+
+const rootReducer = combineReducers({ cardsScroll: CardsOnScrollReducer });
 
 const store = createStore(rootReducer);
 

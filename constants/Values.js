@@ -1,6 +1,7 @@
 export default
     {
-        sex: { MALE: "Male", FEMALE: "Female" },
+        units: { cm: "cm", in: "in", ft: "ft", m: "m" },
+        unitDivisors: { cm: 629.9212598425197, in: 1600, m: 62992.1259843, ft: 19200.00768 },
         status: {
             ACTIVE: "Active",
             CULLED: "Culled",

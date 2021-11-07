@@ -7,8 +7,13 @@ import { useDispatch, useSelector } from 'react-redux';
 
 const Card = props => {
 
-    const age = getAgeString(new Date(props.cardDetails.dateOfLambing));
-    const category = getCategory(new Date(props.cardDetails.dateOfLambing));
+
+    console.log(props.cardDetails);
+    const values = Object.values(props.cardDetails.measurements);
+    var sum = values.reduce((acc, curr) => acc + curr);
+    var max = Math.max(...values);
+    var min = Math.min(...values);
+    var avg = sum / values.length;
 
     return (
         <TouchableOpacity onPress={() => { props.navigationProps.navigate({ routeName: 'Details', params: { lambDetails: props.cardDetails, callBackFunction: props.callBackFunction } }); }} style={{ width: '90%', alignItems: 'center' }}>
@@ -17,9 +22,10 @@ const Card = props => {
                 <View style={{ flexDirection: 'row' }}>
                     <View style={{ paddingLeft: 15 }}>
                         <Text style={styles.numberText}>{props.cardDetails.id}</Text>
-                        <Text style={styles.categoryText}>{'sex: '} <Text style={styles.threatText}>{props.cardDetails.sex}</Text></Text>
-                        <Text style={styles.categoryText}>{'category: '} <Text style={styles.threatText}>{category}</Text></Text>
-                        <Text style={styles.categoryText}>{'age: '} <Text style={styles.threatText}>{age}</Text></Text>
+                        <Text style={styles.categoryText}>{'sum: '} <Text style={styles.threatText}>{sum}</Text></Text>
+                        <Text style={styles.categoryText}>{'avg: '} <Text style={styles.threatText}>{avg}</Text></Text>
+                        <Text style={styles.categoryText}>{'max: '} <Text style={styles.threatText}>{max}</Text></Text>
+                        <Text style={styles.categoryText}>{'min: '} <Text style={styles.threatText}>{min}</Text></Text>
 
                     </View>
                 </View>
