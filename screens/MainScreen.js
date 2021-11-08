@@ -11,7 +11,7 @@ import { fetchCards, setCards } from '../store/actions/CardActions'
 import { set } from 'react-native-reanimated';
 import { Ionicons, FontAwesome, AntDesign, Entypo } from '@expo/vector-icons';
 import SeparatorBar from '../components/SeparatorBar';
-import { getAllCards } from '../databases/DataStore';
+import { getAllCards, deleteCard } from '../databases/DataStore';
 import Values from '../constants/Values';
 import { getCategory } from '../src/DateMethods'
 //const dispatch = useDispatch();
@@ -28,9 +28,7 @@ const MainScreen = props => {
 
     const filteredCards = (() => {
       if (!searchHasText) {
-        return state.cardsScroll.cardsOnScroll.map(x => {
-          return { ...x, category: getCategory(new Date(x.dateOfLambing)) }
-        })
+        return state.cardsScroll.cardsOnScroll
       }
       else {
         return state.cardsScroll.cardsOnScroll.filter(x => x.id.startsWith(searchText));

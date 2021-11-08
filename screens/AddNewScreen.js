@@ -44,13 +44,10 @@ const AddNewScreen = props => {
 
     useEffect(() => {
 
-        console.log("connecting")
-
         BluetoothSerial.read((data, subscription) => {
 
             setRecievedValue(Number(data.trim()))
             if (stopReading && subscription) {
-                console.log("stopped")
                 BluetoothSerial.removeSubscription(subscription);
             }
 

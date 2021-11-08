@@ -3,6 +3,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 export const insertNewCard = async (key, value) => {
+
     const jsonValue = JSON.stringify(value)
     try {
         await AsyncStorage.setItem(key, jsonValue);
