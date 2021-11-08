@@ -1,16 +1,11 @@
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import { createDrawerNavigator } from '@react-navigation/drawer';
 
 import DetailsScreen from '../screens/DetailsScreen';
 import SearchScreen from '../screens/MainScreen';
 import AddNewScreen from '../screens/AddNewScreen';
-import EditingScreen from '../screens/EditingScreen';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import Colors from '../constants/colors';
-import SeparatorBar from '../components/SeparatorBar';
-import StatsScreen from '../screens/StatsScreen';
-import { Ionicons, FontAwesome, AntDesign, Entypo } from '@expo/vector-icons';
 
 import React from 'react';
 
@@ -85,8 +80,6 @@ export default function App() {
                 <StackNavigator.Screen name="Search" component={SearchScreen} options={{ headerShown: false }} />
                 <StackNavigator.Screen name="Details" component={DetailsScreen} />
                 <StackNavigator.Screen name="AddNew" component={AddNewScreen} />
-                <StackNavigator.Screen name="Editing" component={EditingScreen} />
-
             </StackNavigator.Navigator>
         </NavigationContainer>
     );

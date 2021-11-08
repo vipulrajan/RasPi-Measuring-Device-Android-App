@@ -1,10 +1,8 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, TextInput } from 'react-native';
-import { Button } from 'react-native-elements';
 import Colors from '../constants/colors';
 import Values from '../constants/Values';
-import { getFormattedDate, getAgeString, getCategory } from '../src/DateMethods';
-import { useDispatch, useSelector } from 'react-redux';
+
 
 const Card = props => {
 

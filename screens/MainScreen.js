@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { View, StatusBar, Text, TouchableOpacity, StyleSheet, ScrollView, Animated, Dimensions } from 'react-native';
-import { Button } from 'react-native-elements';
+
 import Colors from '../constants/colors';
 import SearchBar from '../components/SearchBar'
 import CardList from '../components/CardList';
@@ -8,12 +8,10 @@ import AddButton from '../components/AddButton';
 
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchCards, setCards } from '../store/actions/CardActions'
-import { set } from 'react-native-reanimated';
-import { Ionicons, FontAwesome, AntDesign, Entypo } from '@expo/vector-icons';
+
 import SeparatorBar from '../components/SeparatorBar';
 import { getAllCards, deleteCard } from '../databases/DataStore';
-import Values from '../constants/Values';
-import { getCategory } from '../src/DateMethods'
+
 //const dispatch = useDispatch();
 
 const MainScreen = props => {

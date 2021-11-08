@@ -2,17 +2,15 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, StatusBar, StyleSheet, ScrollView, Animated, Dimensions, TouchableOpacity, Alert } from 'react-native';
 import { Button } from 'react-native-elements';
 import Colors from '../constants/colors';
-import SearchBar from '../components/SearchBar'
-import Card from '../components/Card';
-import { getFormattedDate, getAgeString, getCategory } from '../src/DateMethods';
+
 import { insertNewCard, cardExists, updateCard, getAllCards, deleteCard, getCard } from '../databases/DataStore';
 import { showMessage, hideMessage } from "react-native-flash-message";
 import { useDispatch } from 'react-redux';
 import { setCards } from '../store/actions/CardActions';
 import Values from '../constants/Values';
-import Modal from 'react-native-modal';
+
 import Picker from 'react-native-picker-select';
-import DateTimePickerModal from "react-native-modal-datetime-picker";
+
 
 
 const DetailsScreen = props => {

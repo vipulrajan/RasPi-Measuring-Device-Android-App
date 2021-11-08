@@ -2,11 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, StatusBar, StyleSheet, ScrollView, Animated, Dimensions } from 'react-native';
 import { Button } from 'react-native-elements';
 import Colors from '../constants/colors';
-import SearchBar from '../components/SearchBar'
-import Card from '../components/Card';
+
 import TextEntryBox from '../components/TextEntryBox';
-import colors from '../constants/colors';
-import DateTimePickerModal from "react-native-modal-datetime-picker";
+
 import { insertNewCard, getAllCards, deleteCard, getCard } from '../databases/DataStore';
 import CardDetails from '../src/CardDetails';
 import { useDispatch } from 'react-redux';
@@ -21,8 +19,6 @@ import BluetoothSerial, {
 
 import 'intl';
 import 'intl/locale-data/jsonp/en';
-
-import { getFormattedDate } from '../src/DateMethods'
 
 class entryField {
     constructor(value, isSet) {
