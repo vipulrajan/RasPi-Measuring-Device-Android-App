@@ -8,37 +8,28 @@ import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import Colors from '../constants/colors';
 
 import React from 'react';
+import { createDrawerNavigator } from '@react-navigation/drawer';
 
 
 
 const StackNavigator = createStackNavigator();
+const DrawerNavigator = createDrawerNavigator();
 
 
 
-
-/*onst drawerContents = props => {
+function DrawerContents({ navigation }) {
 
     return (
         <View style={styles.container}>
-            <TouchableOpacity onPress={() => { props.navigation.navigate({ routeName: 'statsScreen' }); }} >
-
-                <Text style={styles.logoText}>Bheddu</Text>
-            </TouchableOpacity>
-            <SeparatorBar style={{ height: 3, width: '100%' }} />
-
-            <TouchableOpacity onPress={() => { props.navigation.navigate({ routeName: 'searchScreen' }); }} style={{ flexDirection: 'row' }} >
-                <FontAwesome name="home" color={Colors.textAndSymbols} size={24} style={{ paddingHorizontal: 10 }} />
-                <Text style={styles.screenText}>Home</Text>
-            </TouchableOpacity>
-            <SeparatorBar style={{ width: '80%' }} />
-            <TouchableOpacity onPress={() => { props.navigation.navigate({ routeName: 'statsScreen' }); }} style={{ flexDirection: 'row' }} >
-                <Entypo name="bar-graph" color={Colors.textAndSymbols} size={24} style={{ paddingHorizontal: 10 }} />
-                <Text style={styles.screenText}>Statistics</Text>
-            </TouchableOpacity>
+            <Text style={styles.logoText}>Nosey, you are, young padawan</Text>
+            <Text style={styles.logoText}>{" "}</Text>
+            <Text style={styles.logoText}>The measurer App </Text>
+            <Text style={styles.logoText}>{" "}</Text>
+            <Text style={styles.logoText}>Copyright no one really, go crazy</Text>
 
         </View>);
 }
-const mainNavigator = createDrawerNavigator({
+/*const mainNavigator = createDrawerNavigator({
     searchScreen: Navigator,
     statsScreen: StatsScreen
 }, {
@@ -51,6 +42,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: Colors.drawerBackgroundColor,
+        flexDirection: 'column',
         alignItems: 'flex-start',
         paddingTop: 55,
         paddingLeft: 20
@@ -65,6 +57,15 @@ const styles = StyleSheet.create({
     }
 })
 
+function Stack() {
+    return (
+        <StackNavigator.Navigator initialRouteName="Home">
+            <StackNavigator.Screen name="Search" component={SearchScreen} options={{ headerShown: false }} />
+            <StackNavigator.Screen name="Details" component={DetailsScreen} />
+            <StackNavigator.Screen name="AddNew" component={AddNewScreen} />
+        </StackNavigator.Navigator>
+    );
+}
 export default function App() {
 
     /*{
@@ -76,11 +77,14 @@ export default function App() {
 
     return (
         <NavigationContainer>
-            <StackNavigator.Navigator initialRouteName="Home">
-                <StackNavigator.Screen name="Search" component={SearchScreen} options={{ headerShown: false }} />
-                <StackNavigator.Screen name="Details" component={DetailsScreen} />
-                <StackNavigator.Screen name="AddNew" component={AddNewScreen} />
-            </StackNavigator.Navigator>
-        </NavigationContainer>
+            <DrawerNavigator.Navigator initialRouteName="Home" screenOptions={{
+                drawerStyle: {
+                    backgroundColor: 'transparent',
+                    width: 240,
+                },
+            }} drawerContent={(props) => <DrawerContents {...props} />} >
+                <DrawerNavigator.Screen name="Home" component={Stack} options={{ headerShown: false }} />
+            </DrawerNavigator.Navigator>
+        </NavigationContainer >
     );
 }
